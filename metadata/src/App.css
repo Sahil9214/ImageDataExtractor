@@ -1,0 +1,47 @@
+.App{
+  background-image: url('./meta-background.jpg');
+
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+
+ 
+}
+
+.main{
+  width: 80%;
+  margin: auto;
+
+}
+.heading{
+  font-size: 45px;
+  line-height: 52px;
+  font-weight: 600;
+  color: #fff;
+}
+.paragraph{
+   font-size:25px;
+   line-height: 32px;
+   margin-top: 12px;
+   color: #fff;
+}
+.main-container{
+   /* background-color: #00dcf8; */
+   width: 80%;
+   height: 350px;
+   margin: auto;
+   margin-top: 32px!important;
+   
+  
+}
+.main-inside{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 22px;
+}
+.image-save{
+  width: 100px;
+  height: 150px;
+}
