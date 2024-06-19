@@ -4,7 +4,6 @@ import {
   Box,
   Flex,
   Avatar,
-  Text,
   Button,
   Menu,
   MenuButton,
@@ -12,7 +11,6 @@ import {
   MenuItem,
   MenuDivider,
   useDisclosure,
-  useColorModeValue,
   Stack,
   useColorMode,
   Center,
@@ -63,13 +61,12 @@ export default function Navbar() {
                   </Center>
                   <br />
                   <Center>
-                    <p>Username</p>
+                    <p>Meta Data Extractor</p>
                   </Center>
                   <br />
                   <MenuDivider />
-                  <MenuItem>Your Servers</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
+                  <MenuItem>Utkarsh Singhal</MenuItem>
+                  <MenuItem>Full Stack Engineer</MenuItem>
                 </MenuList>
               </Menu>
             </Stack>
