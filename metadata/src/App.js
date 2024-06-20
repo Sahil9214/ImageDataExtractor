@@ -46,6 +46,8 @@ function App() {
     const formData = new FormData();
     formData.append("image", file);
 
+    setLoading(true);
+
     try {
       const response = await axios.post(
         "https://metadata-image-backend.onrender.com/upload",
@@ -58,10 +60,11 @@ function App() {
       );
 
       setMetadata(response.data);
-      fetchMetadata();
       await fetchMetadata();
     } catch (err) {
       console.error("Error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -192,7 +195,6 @@ function App() {
                     {allMetadata[allMetadata.length - 1].tags?.MIMEType}
                   </p>
                 )}
-
                 <p>
                   FileSize :{" "}
                   {allMetadata[allMetadata.length - 1].tags?.FileSize}
@@ -213,14 +215,12 @@ function App() {
                     {allMetadata[allMetadata.length - 1].tags?.PixelsPerUnitY}
                   </p>
                 )}
-
                 {allMetadata[allMetadata.length - 1].tags?.Compression && (
                   <p>
                     Compression :{" "}
                     {allMetadata[allMetadata.length - 1].tags?.Compression}
                   </p>
                 )}
-
                 <p>
                   lastModifiedDate :{" "}
                   {formatDate(
