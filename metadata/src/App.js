@@ -4,6 +4,7 @@ import { Box, Button, Spinner } from "@chakra-ui/react";
 import sav from "./sav.png";
 import { useState } from "react";
 import axios from "axios";
+import { useToast } from "@chakra-ui/react";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -11,6 +12,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [allMetadata, setAllMetadata] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const toast = useToast();
 
   const fetchMetadata = async () => {
     setLoading(true);
@@ -39,15 +41,20 @@ function App() {
 
   const handleClick = async () => {
     if (!file) {
-      alert("Please select a file first");
+      toast({
+        title: "Please select a file",
+        description: "No image added by you",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
 
     const formData = new FormData();
     formData.append("image", file);
-
+    console.log("formData", formData);
     setLoading(true);
-
     try {
       const response = await axios.post(
         "https://metadata-image-backend.onrender.com/upload",
@@ -227,6 +234,52 @@ function App() {
                     allMetadata[allMetadata.length - 1].lastModifiedDate
                   )}
                 </p>
+                {allMetadata[allMetadata.length - 1].tags?.ResolutionUnit && (
+                  <p>
+                    ResolutionUnit :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ResolutionUnit}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileMMType && (
+                  <p>
+                    ProfileMMType :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileMMType}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileVersion && (
+                  <p>
+                    ProfileVersion :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileVersion}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.DeviceAttributes && (
+                  <p>
+                    DeviceAttributes :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.DeviceAttributes}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileCreator && (
+                  <p>
+                    ProfileCreator :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileCreator}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileCopyright && (
+                  <p>
+                    ProfileCopyright :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileCopyright}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags
+                  ?.ProfileDescription && (
+                  <p>
+                    ProfileDescription :{" "}
+                    {
+                      allMetadata[allMetadata.length - 1].tags
+                        ?.ProfileDescription
+                    }
+                  </p>
+                )}
               </Box>
             </Box>
           )}
