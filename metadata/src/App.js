@@ -13,6 +13,7 @@ function App() {
   const [allMetadata, setAllMetadata] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const { colorMode, toggleColorMode } = useColorMode();
+
   const toast = useToast();
 
   const fetchMetadata = async () => {
@@ -31,10 +32,11 @@ function App() {
 
   const handleImage = async (e) => {
     const input = e.target.value;
-
+    console.log(input);
     if (input.startsWith("http://") || input.startsWith("https://")) {
       try {
         const response = await axios.get(input, { responseType: "blob" });
+
         const url = URL.createObjectURL(response.data);
         setImagePreview(url);
         setFile(response.data);
@@ -74,11 +76,12 @@ function App() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("image", file, file.name || "image.jpg");
-
+    const formData = {}; //new FormData();
+    console.log("file", file);
+    // formData.append("image", file, file.name || "image.jpg");
+    formData["image"] = file;
     setLoading(true);
-
+    console.log("formData", formData);
     try {
       const response = await axios.post(
         "https://metadata-image-backend.onrender.com/upload",
@@ -92,7 +95,15 @@ function App() {
       setMetadata(response.data);
       await fetchMetadata();
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Error:", err.response.data);
+      toast({
+        title: "Error",
+        description: `${err.response.data}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
     } finally {
       setLoading(false);
     }
