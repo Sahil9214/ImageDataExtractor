@@ -66,9 +66,11 @@ function App() {
   const handleClick = async () => {
     if (!file) {
       toast({
-        position: "top",
-        title: "File Not Added.",
-        description: "Please add an image file or URL.",
+
+
+        title: "Please select a file",
+        description: "No image added by you",
+
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -76,12 +78,14 @@ function App() {
       return;
     }
 
+
     const formData = {}; //new FormData();
     console.log("file", file);
     // formData.append("image", file, file.name || "image.jpg");
     formData["image"] = file;
     setLoading(true);
     console.log("formData", formData);
+
     try {
       const response = await axios.post(
         "https://metadata-image-backend.onrender.com/upload",
@@ -300,6 +304,52 @@ function App() {
                     allMetadata[allMetadata.length - 1].lastModifiedDate
                   )}
                 </p>
+                {allMetadata[allMetadata.length - 1].tags?.ResolutionUnit && (
+                  <p>
+                    ResolutionUnit :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ResolutionUnit}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileMMType && (
+                  <p>
+                    ProfileMMType :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileMMType}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileVersion && (
+                  <p>
+                    ProfileVersion :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileVersion}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.DeviceAttributes && (
+                  <p>
+                    DeviceAttributes :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.DeviceAttributes}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileCreator && (
+                  <p>
+                    ProfileCreator :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileCreator}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags?.ProfileCopyright && (
+                  <p>
+                    ProfileCopyright :{" "}
+                    {allMetadata[allMetadata.length - 1].tags?.ProfileCopyright}
+                  </p>
+                )}
+                {allMetadata[allMetadata.length - 1].tags
+                  ?.ProfileDescription && (
+                  <p>
+                    ProfileDescription :{" "}
+                    {
+                      allMetadata[allMetadata.length - 1].tags
+                        ?.ProfileDescription
+                    }
+                  </p>
+                )}
               </Box>
             </Box>
           )}
