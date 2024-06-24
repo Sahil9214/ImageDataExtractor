@@ -1,6 +1,6 @@
 import "./App.css";
 import Navbar from "./Components/Navbar/Navbar";
-import { Box, Button, Spinner } from "@chakra-ui/react";
+import { Box, Button, Spinner, useColorMode } from "@chakra-ui/react";
 import sav from "./sav.png";
 import { useState } from "react";
 import axios from "axios";
@@ -12,6 +12,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [allMetadata, setAllMetadata] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const { colorMode, toggleColorMode } = useColorMode();
+
   const toast = useToast();
 
   const fetchMetadata = async () => {
@@ -28,22 +30,47 @@ function App() {
     }
   };
 
-  const handleImage = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setMetadata(null);
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(selectedFile);
+  const handleImage = async (e) => {
+    const input = e.target.value;
+    console.log(input);
+    if (input.startsWith("http://") || input.startsWith("https://")) {
+      try {
+        const response = await axios.get(input, { responseType: "blob" });
+
+        const url = URL.createObjectURL(response.data);
+        setImagePreview(url);
+        setFile(response.data);
+      } catch (error) {
+        console.error("Error fetching image from URL:", error);
+        toast({
+          position: "top",
+          title: "Invalid URL.",
+          description: "Could not fetch image from URL.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } else {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMetadata(null);
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
   };
 
   const handleClick = async () => {
     if (!file) {
       toast({
+
+
         title: "Please select a file",
         description: "No image added by you",
+
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -51,10 +78,14 @@ function App() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("image", file);
-    console.log("formData", formData);
+
+    const formData = {}; //new FormData();
+    console.log("file", file);
+    // formData.append("image", file, file.name || "image.jpg");
+    formData["image"] = file;
     setLoading(true);
+    console.log("formData", formData);
+
     try {
       const response = await axios.post(
         "https://metadata-image-backend.onrender.com/upload",
@@ -65,11 +96,18 @@ function App() {
           },
         }
       );
-
       setMetadata(response.data);
       await fetchMetadata();
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Error:", err.response.data);
+      toast({
+        title: "Error",
+        description: `${err.response.data}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
     } finally {
       setLoading(false);
     }
@@ -85,8 +123,18 @@ function App() {
     <div className="App">
       <Navbar />
       <Box className="main">
-        <h1 className="heading">View MetaData</h1>
-        <p className="paragraph">Get All Metadata Info Of Your Files</p>
+        <h1
+          className="heading"
+          style={{ color: `${colorMode === "light" ? "black" : "white"}` }}
+        >
+          View MetaData
+        </h1>
+        <p
+          style={{ color: `${colorMode === "light" ? "black" : "white"}` }}
+          className="paragraph"
+        >
+          Get All Metadata Info Of Your Files
+        </p>
       </Box>
       <Box className="main-container">
         <Box className="main-inside">
@@ -103,11 +151,33 @@ function App() {
           )}
           <br />
         </Box>
-        <Box style={{ width: "20%", margin: "auto" }}>
+        <Box
+          style={{
+            width: "20%",
+            margin: "auto",
+          }}
+        >
           <input type="file" onChange={handleImage} />
           <br />
           <br />
+
+          <span style={{ marginLeft: "50%", fontSize: "22px" }}>Or</span>
+          <br />
+          <br />
+
+          <input
+            type="url"
+            onChange={handleImage}
+            placeholder="Enter image URL"
+            style={{
+              border: "1px solid black",
+              borderRadius: "8px",
+              padding: "5px",
+            }}
+          />
+          <br />
         </Box>
+        <br />
         <Box style={{ width: "20%", margin: "auto" }}>
           <Button onClick={handleClick} style={{ width: "100%" }}>
             Add
