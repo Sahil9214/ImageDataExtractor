@@ -11,18 +11,21 @@
   line-height: 52px;
   font-weight: 600;
   color: #fff;
+  font-style: italic;
 }
 .paragraph{
    font-size:25px;
    line-height: 32px;
    margin-top: 12px;
    color: #fff;
+   font-style: italic;
 }
 .main-container{
    /* background-color: #00dcf8; */
    width: 60vw;
-   height: 80vh;
+   height: 45%;
    margin: auto;
+
 
    /* margin-top: 32px!important;  */
 }
@@ -35,25 +38,47 @@
 .image-save{
   width: 250px;
   height:300px;
+
 }
 .metadata-list{
   width:80%;
   margin: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
+.metadata-list-grid{
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 20px;
+  
+   width: 80%;
+   margin-top: 30px;
+   
+}
+
 .image-save-file{
-  width: 60vw;
-  height: 80vh;
+width: 150px;
+height: 200px;
 }
 /* App.css */
 
 .canva{
-border: 2px solid red;
+
 position: absolute;
 }
 .canvas-imageAnnotation{
-border:3px solid green;
+
 height: 100%;
 width: 100%;
 position: absolute;
 
+}
+.loading-indicator{
+  
+  margin-top:50px;
+  width: 30%;
+  margin: auto;
 }
